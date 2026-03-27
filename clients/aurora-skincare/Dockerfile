@@ -36,7 +36,8 @@ RUN composer config --global audit.block-insecure false \
 
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
     && mkdir -p public/uploads/all \
-    && touch .env \
+    && if [ ! -f .env ] && [ -f .env.example ]; then cp .env.example .env; fi \
+    && php artisan key:generate --force \
     && chown -R www-data:www-data storage bootstrap/cache public/uploads .env app/Providers/RouteServiceProvider.php \
     && chmod -R ug+rwX public/uploads storage bootstrap/cache \
     && chmod 664 .env app/Providers/RouteServiceProvider.php
