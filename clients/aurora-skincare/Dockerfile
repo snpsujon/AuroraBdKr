@@ -31,7 +31,8 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+RUN composer config --global audit.block-insecure false \
+    && composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev --no-audit
 
 RUN mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
     && mkdir -p public/uploads/all \
