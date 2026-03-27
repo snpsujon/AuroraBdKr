@@ -129,6 +129,21 @@ get_project_domain() {
   state_get "${project_id}" "domain"
 }
 
+get_project_public_url() {
+  local project_id="$1"
+  local domain
+  local port
+
+  domain="$(get_project_domain "${project_id}")"
+  port="$(get_project_port "${project_id}")"
+
+  if [[ -n "${domain}" ]]; then
+    echo "https://${domain}"
+  else
+    echo "http://localhost:${port}"
+  fi
+}
+
 set_project_domain() {
   local project_id="$1"
   local domain="$2"
@@ -239,12 +254,14 @@ run_compose() {
   local project_port
   local dev_port_env
   local project_dev_port
+  local project_public_url
 
   compose_file="${SCRIPT_DIR}/$(project_field "${project_id}" "compose_file")"
   port_env="$(project_field "${project_id}" "port_env")"
   project_port="$(get_project_port "${project_id}")"
   dev_port_env="$(project_field "${project_id}" "dev_port_env")"
   project_dev_port="$(get_project_dev_port "${project_id}")"
+  project_public_url="$(get_project_public_url "${project_id}")"
 
   if [[ ! -f "${compose_file}" ]]; then
     echo "Compose file not found: ${compose_file}"
@@ -252,12 +269,12 @@ run_compose() {
   fi
 
   if [[ -n "${dev_port_env}" && "${dev_port_env}" != "null" && -n "${project_dev_port}" ]]; then
-    env "${port_env}=${project_port}" "${dev_port_env}=${project_dev_port}" docker compose \
+    env "${port_env}=${project_port}" "${dev_port_env}=${project_dev_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" docker compose \
       --project-directory "${SCRIPT_DIR}" \
       -f "${compose_file}" \
       "$@"
   else
-    env "${port_env}=${project_port}" docker compose \
+    env "${port_env}=${project_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" docker compose \
       --project-directory "${SCRIPT_DIR}" \
       -f "${compose_file}" \
       "$@"
