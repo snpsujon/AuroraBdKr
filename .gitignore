@@ -1,0 +1,17 @@
+# Ignore other projects in this directory
+N/
+New/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio / IDEs
+.vs/
+.vscode/
+
+# Build results and node_modules (just in case they exist in the root)
+node_modules/
+dist/
+bin/
+obj/
