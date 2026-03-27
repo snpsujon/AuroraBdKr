@@ -255,6 +255,7 @@ run_compose() {
   local dev_port_env
   local project_dev_port
   local project_public_url
+  local force_https
 
   compose_file="${SCRIPT_DIR}/$(project_field "${project_id}" "compose_file")"
   port_env="$(project_field "${project_id}" "port_env")"
@@ -262,6 +263,11 @@ run_compose() {
   dev_port_env="$(project_field "${project_id}" "dev_port_env")"
   project_dev_port="$(get_project_dev_port "${project_id}")"
   project_public_url="$(get_project_public_url "${project_id}")"
+  if [[ "${project_public_url}" == https://* ]]; then
+    force_https="On"
+  else
+    force_https="Off"
+  fi
 
   if [[ ! -f "${compose_file}" ]]; then
     echo "Compose file not found: ${compose_file}"
@@ -269,12 +275,12 @@ run_compose() {
   fi
 
   if [[ -n "${dev_port_env}" && "${dev_port_env}" != "null" && -n "${project_dev_port}" ]]; then
-    env "${port_env}=${project_port}" "${dev_port_env}=${project_dev_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" docker compose \
+    env "${port_env}=${project_port}" "${dev_port_env}=${project_dev_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" "FORCE_HTTPS=${force_https}" docker compose \
       --project-directory "${SCRIPT_DIR}" \
       -f "${compose_file}" \
       "$@"
   else
-    env "${port_env}=${project_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" docker compose \
+    env "${port_env}=${project_port}" "APP_URL=${project_public_url}" "ASSET_URL=${project_public_url}" "FORCE_HTTPS=${force_https}" docker compose \
       --project-directory "${SCRIPT_DIR}" \
       -f "${compose_file}" \
       "$@"
