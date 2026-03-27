@@ -1,0 +1,44 @@
+Active eCommerce CMS NULLED
+
+https://doniaweb.com/files/file/2277-active-ecommerce-cms-addons-and-apps/?_fromLogin=1
+
+Main Purchase Code and Secret Key: b15c483b-686a-1343-a919-810ac895d0dc
+
+Addon Name | Purchase Code
+--------------------------------------------------------------
+affiliate_system | b9ae86b1-aeb5-4d61-a9bc-237c1414847c
+african_pg | 5c435420-cb1c-4026-aed5-1df1b5460f3a
+paytm | a80696b3-48e5-4f61-b597-54f0484de835
+auction | 62fc602f-c049-4beb-8c02-763a6d12314d
+club_point | 8017e980-6eb1-4143-8e67-3bc4b8e06cdc
+cybersource | 23e37036-6f0b-4f74-b645-d298628e47f8
+delivery_boy | 7483a47c-c967-44fb-8160-7f2755f6263a
+kapitalbank | 91f338ef-f334-4aba-8e6f-82695db47467
+offline_payment | b40c804d-7f4a-4ab1-a447-0e6c17cc4047
+otp_system | 8a5a0163-1319-420e-9c34-bb9da3ddb37e
+pos_system | a19d450e-47d4-4c74-ba4d-04e6b9acce70
+preorder | 43e07af2-3ca0-4d32-b9b4-450570d446ec
+refund_request | 21f0ad4e-a4f6-41ff-870a-5ded7c91b282
+seller_subscription | 6fb2cbaf-f65e-4c9a-bf18-7d4c526189a9
+wholesale | 8691e747-e530-49e4-a0aa-cb3a98d5784e
+kapitalbank | 91f338ef-f334-4aba-8e6f-82695db47467
+google_one_tap | 73fd24b0-a210-4dc0-9b07-3dab24d89db7
+piprapay | e2ac4339-0c4c-43a2-92f2-87032cb65fa9 
+
+DB_CONNECTION: mysql
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_DATABASE: ${DB_DATABASE:-aorora-skin}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-Asdf019lkjh}
+	  
+	  
+	  Customer
+customer@example.com
+123456
+Seller
+seller@example.com
+123456
+Admin
+snpsujon93@gmail.com
+admin123

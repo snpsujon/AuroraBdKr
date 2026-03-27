@@ -1,7 +1,3 @@
-# Ignore other projects in this directory
-N/
-New/
-
 # OS generated files
 .DS_Store
 Thumbs.db
@@ -9,9 +5,30 @@ Thumbs.db
 # Visual Studio / IDEs
 .vs/
 .vscode/
+*.suo
+*.user
 
-# Build results and node_modules (just in case they exist in the root)
+# .NET / C# ignores
+[Bb]in/
+[Oo]bj/
+*.userprefs
+appsettings.Development.json
+
+# Node / Frontend ignores
 node_modules/
 dist/
-bin/
-obj/
+out/
+.angular/
+
+# PHP / Laravel / Composer ignores (for Nulled CMS)
+vendor/
+.env
+storage/framework/views/
+storage/logs/
+
+# General logs
+*.log
+
+# Compressed archives
+*.zip
+*.rar
