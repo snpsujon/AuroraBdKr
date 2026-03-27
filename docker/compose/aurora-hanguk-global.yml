@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: ./clients/aurora-hanguk-global
+      dockerfile: Dockerfile
+    container_name: aurora-hanguk-global-web
+    ports:
+      - "${APP_PORT:-8080}:80"
+    restart: unless-stopped
+
+  dev:
+    image: node:20-alpine
+    container_name: aurora-hanguk-global-dev
+    working_dir: /app
+    command: sh -c "npm ci && npm run start -- --host 0.0.0.0 --port 4200"
+    ports:
+      - "${DEV_PORT:-4200}:4200"
+    volumes:
+      - ./clients/aurora-hanguk-global:/app
+      - /app/node_modules
+    profiles:
+      - dev

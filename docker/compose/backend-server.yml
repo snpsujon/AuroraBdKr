@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: ./servers/src
+      dockerfile: Aurora.API/Dockerfile
+    container_name: aurora-api
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Server=db,1433;Database=AuroraBdKr;User Id=sa;Password=${SA_PASSWORD:-Your_strong_password123!};TrustServerCertificate=True;MultipleActiveResultSets=true
+    ports:
+      - "${API_PORT:-5287}:8080"
+    restart: unless-stopped
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: aurora-sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD:-Your_strong_password123!}
+    ports:
+      - "${DB_PORT:-1433}:1433"
+    volumes:
+      - aurora_sql_data:/var/opt/mssql
+    restart: unless-stopped
+
+volumes:
+  aurora_sql_data:

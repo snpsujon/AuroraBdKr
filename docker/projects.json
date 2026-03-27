@@ -1,0 +1,33 @@
+{
+  "projects": [
+    {
+      "id": "aurora-hanguk-global",
+      "label": "Aurora Hanguk Global",
+      "compose_file": "docker/compose/aurora-hanguk-global.yml",
+      "default_service": "web",
+      "nginx_site": "aurora-hanguk-global",
+      "port_env": "APP_PORT",
+      "default_port": 8081,
+      "dev_port_env": "DEV_PORT",
+      "default_dev_port": 4200
+    },
+    {
+      "id": "aurora-skincare",
+      "label": "Aurora Skincare",
+      "compose_file": "docker/compose/aurora-skincare.yml",
+      "default_service": "laravel",
+      "nginx_site": "aurora-skincare",
+      "port_env": "APP_PORT",
+      "default_port": 8080
+    },
+    {
+      "id": "backend-server",
+      "label": "Backend Server",
+      "compose_file": "docker/compose/backend-server.yml",
+      "default_service": "api",
+      "nginx_site": "aurora-backend-server",
+      "port_env": "API_PORT",
+      "default_port": 5287
+    }
+  ]
+}
