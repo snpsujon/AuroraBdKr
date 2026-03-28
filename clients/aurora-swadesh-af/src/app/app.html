@@ -30,8 +30,8 @@
           </svg>
         </div>
         <div>
-          <h1 class="text-xl font-black text-secondary leading-none uppercase tracking-tighter">Ghorer</h1>
-          <h2 class="text-xl font-bold text-primary leading-none uppercase tracking-tighter">Bazar</h2>
+          <h1 class="text-xl font-black text-secondary leading-none uppercase tracking-tighter">Aurora</h1>
+          <h2 class="text-xl font-bold text-primary leading-none uppercase tracking-tighter">Swadesh AF</h2>
         </div>
       </div>
 
@@ -81,21 +81,38 @@
   <!-- MAIN CONTENT -->
   <main class="container mx-auto px-4 py-8">
     <!-- HERO SECTION -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 h-[480px]">
-      <div class="md:col-span-8 bg-gray-100 rounded-[2.5rem] overflow-hidden relative group cursor-pointer shadow-sm">
-        <img src="https://placehold.co/1200x600/f37021/fff?text=সরাসরি+প্রকৃতি+থেকে+আপনার+ঘরে" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-        <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
-        <div class="absolute bottom-10 left-10 text-white max-w-lg">
-            <h2 class="text-4xl font-black mb-4 leading-tight">সরাসরি প্রকৃতি থেকে আপনার ঘরে</h2>
-             <div class="flex gap-2">
-                <div class="w-12 h-1 bg-white rounded-full"></div>
-                <div class="w-4 h-1 bg-white/40 rounded-full"></div>
-                <div class="w-4 h-1 bg-white/40 rounded-full"></div>
-             </div>
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-[400px]">
+      <!-- Slider -->
+      <div class="md:col-span-8 rounded-xl overflow-hidden relative group shadow-sm h-full bg-gray-100" (mouseenter)="stopSlider()" (mouseleave)="startSlider()">
+        <div class="w-full h-full flex transition-transform duration-700 ease-in-out" [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+            <img *ngFor="let img of sliderImages" [src]="img" class="w-full h-full object-cover shrink-0">
+        </div>
+        
+        <!-- Left Arrow -->
+        <button (click)="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white text-primary rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-sm hover:shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+
+        <!-- Right Arrow -->
+        <button (click)="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white text-primary rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 shadow-sm hover:shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+        </button>
+
+        <!-- Dots -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            <button *ngFor="let img of sliderImages; let i = index" 
+                    (click)="goToSlide(i)"
+                    class="h-2.5 rounded-full transition-all duration-300"
+                    [class.bg-white]="currentSlide === i"
+                    [class.w-8]="currentSlide === i"
+                    [class.w-2.5]="currentSlide !== i"
+                    [class.bg-white/50]="currentSlide !== i">
+            </button>
         </div>
       </div>
-      <div class="md:col-span-4 rounded-[2.5rem] overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-700 cursor-pointer group">
-        <img src="https://placehold.co/600x600/FFB800/fff?text=শুরু+হোক+আপনার+হেলদি+জার্নি" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+      <!-- Right Image -->
+      <div class="md:col-span-4 rounded-xl overflow-hidden bg-gray-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group h-full">
+        <img src="assets/images/healthy.png"  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]">
       </div>
     </div>
 
@@ -114,9 +131,11 @@
             </a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
-            <div *ngFor="let cat of categories" class="ghorer-card p-8 flex items-center justify-between cursor-pointer group hover:border-primary/50 hover:-translate-y-1">
-                <span class="text-sm font-bold text-secondary group-hover:text-primary transition-colors">{{cat.name}}</span>
-                <span class="text-4xl filter transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">{{cat.icon}}</span>
+            <div *ngFor="let cat of categories" class="ghorer-card p-5 bg-white rounded-lg border border-gray-100 flex items-center justify-between cursor-pointer group hover:border-primary/50 hover:shadow-md transition-all duration-300">
+                <span class="text-[13px] font-bold text-secondary group-hover:text-primary transition-colors flex-1 pr-2">{{cat.name}}</span>
+                <div class="w-12 h-12 flex items-center justify-center shrink-0">
+                    <img [src]="cat.image" [alt]="cat.name" class="w-full h-full object-contain filter transition-all duration-500 group-hover:scale-110 group-hover:-rotate-3">
+                </div>
             </div>
         </div>
     </section>
@@ -155,6 +174,249 @@
                     <button class="flex-1 bg-primary text-white font-black py-3.5 rounded-2xl transition-all hover:shadow-xl hover:-translate-y-1 text-xs uppercase tracking-wider active:scale-95">Buy now</button>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- OUR BRANDS -->
+    <section class="mt-24">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+            <h2 class="text-[20px] font-bold text-secondary">Our Brands</h2>
+            <a href="#" class="text-primary font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:translate-x-1 transition-transform group">
+                SEE ALL
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div *ngFor="let brand of brandLogos" class="bg-white rounded-lg border border-gray-100 flex items-center justify-center p-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group h-[110px]">
+                <img [src]="brand.image" [alt]="brand.name" class="max-w-[160px] max-h-[80px] object-contain filter transition-all duration-500 group-hover:scale-105">
+            </div>
+        </div>
+
+        <div class="flex justify-center items-center gap-1.5 mt-8">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+        </div>
+    </section>
+
+    <!-- ALL NATURAL HONEY -->
+    <section class="mt-20">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+            <h2 class="text-[20px] font-bold text-secondary">All Natural Honey</h2>
+            <a href="#" class="text-primary font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:translate-x-1 transition-transform group">
+                VIEW ALL ITEMS
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+            <div *ngFor="let prod of honeyProducts" class="bg-white rounded border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 group relative flex flex-col h-full bg-cover">
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 right-4 flex justify-between z-10 pointer-events-none">
+                     <span class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded leading-none">{{prod.badge}}</span>
+                     <span *ngIf="prod.discount && prod.discount !== '0%'" class="bg-[#10b981] text-white text-[10px] font-bold px-2 py-1 rounded leading-none">{{prod.discount}}</span>
+                </div>
+                
+                <!-- Image -->
+                <div class="w-full h-48 mb-4 relative flex items-center justify-center p-2">
+                     <img [src]="prod.image" [alt]="prod.name" class="max-h-full object-contain mix-blend-multiply group-hover:scale-105 group-hover:rotate-1 transition-transform duration-500">
+                </div>
+                
+                <!-- Info -->
+                <div class="mt-auto flex flex-col justify-end">
+                    <h3 class="text-[13px] font-medium text-secondary mb-1 leading-tight min-h-[40px]">{{prod.name}}</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-[15px] font-bold text-primary">৳{{prod.price}}</span>
+                        <span *ngIf="prod.oldPrice > 0" class="text-[12px] text-gray-400 line-through">৳{{prod.oldPrice}}</span>
+                    </div>
+                    
+                    <button class="w-full border border-primary/40 text-primary text-[13px] font-semibold py-2.5 rounded flex items-center justify-center gap-2 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Add To Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center items-center gap-1.5 mt-8">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+        </div>
+    </section>
+
+    <!-- PREMIUM DATES -->
+    <section class="mt-20">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+            <h2 class="text-[20px] font-bold text-secondary">Premium Dates</h2>
+            <a href="#" class="text-primary font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:translate-x-1 transition-transform group">
+                VIEW ALL ITEMS
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+            <div *ngFor="let prod of premiumDates" class="bg-white rounded border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 group relative flex flex-col h-full bg-cover">
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 right-4 flex justify-end z-10 pointer-events-none">
+                     <span *ngIf="prod.discount && prod.discount !== '0%'" class="bg-[#10b981] text-white text-[10px] font-bold px-2 py-1 rounded leading-none">Save {{prod.discount}}</span>
+                </div>
+                
+                <!-- Image -->
+                <div class="w-full h-48 mb-4 relative flex items-center justify-center p-2">
+                     <img [src]="prod.image" [alt]="prod.name" onerror="this.src='https://placehold.co/300x400/fff/f37021?text=Dates'" class="max-h-full object-contain mix-blend-multiply group-hover:scale-105 group-hover:rotate-1 transition-transform duration-500">
+                </div>
+                
+                <!-- Info -->
+                <div class="mt-auto flex flex-col justify-end">
+                    <h3 class="text-[13px] font-medium text-secondary mb-1 leading-tight min-h-[40px]">{{prod.name}}</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-[15px] font-bold text-primary">৳{{prod.price}}</span>
+                        <span *ngIf="prod.oldPrice" class="text-[12px] text-gray-400 line-through">৳{{prod.oldPrice}}</span>
+                    </div>
+                    
+                    <button class="w-full border border-primary/40 text-primary text-[13px] font-semibold py-2.5 rounded flex items-center justify-center gap-2 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Add To Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center items-center gap-1.5 mt-8">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+        </div>
+    </section>
+
+    <!-- PROMO BANNERS -->
+    <section class="mt-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="rounded-2xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-lg transition-all h-[300px]">
+                <img src="assets/images/ovijat.png" onerror="this.src='https://placehold.co/800x400/f37021/fff?text=Dates+Offer'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            </div>
+            <div class="rounded-2xl overflow-hidden group cursor-pointer shadow-sm hover:shadow-lg transition-all h-[300px]">
+                <img src="assets/images/honey.png" onerror="this.src='https://placehold.co/800x400/10b981/fff?text=Honey+Offer'" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+            </div>
+        </div>
+    </section>
+
+    <!-- COOKING ESSENTIALS -->
+    <section class="mt-20">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+            <h2 class="text-[20px] font-bold text-secondary">Cooking Essentials</h2>
+            <a href="#" class="text-primary font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:translate-x-1 transition-transform group">
+                VIEW ALL ITEMS
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+            <div *ngFor="let prod of cookingEssentials" class="bg-white rounded border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 group relative flex flex-col h-full bg-cover">
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 right-4 flex justify-end z-10 pointer-events-none">
+                     <span *ngIf="prod.discount && prod.discount !== '0%'" class="bg-[#10b981] text-white text-[10px] font-bold px-2 py-1 rounded leading-none">Save {{prod.discount}}</span>
+                </div>
+                
+                <!-- Image -->
+                <div class="w-full h-48 mb-4 relative flex items-center justify-center p-2">
+                     <img [src]="prod.image" [alt]="prod.name" onerror="this.src='https://placehold.co/300x400/fff/f37021?text=Cooking'" class="max-h-full object-contain mix-blend-multiply group-hover:scale-105 group-hover:rotate-1 transition-transform duration-500">
+                </div>
+                
+                <!-- Info -->
+                <div class="mt-auto flex flex-col justify-end">
+                    <h3 class="text-[13px] font-medium text-secondary mb-1 leading-tight min-h-[40px]">{{prod.name}}</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-[15px] font-bold text-primary">৳{{prod.price}}</span>
+                        <span *ngIf="prod.oldPrice" class="text-[12px] text-gray-400 line-through">৳{{prod.oldPrice}}</span>
+                    </div>
+                    
+                    <button class="w-full border border-primary/40 text-primary text-[13px] font-semibold py-2.5 rounded flex items-center justify-center gap-2 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Add To Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center items-center gap-1.5 mt-8">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+        </div>
+    </section>
+
+    <!-- JUST FOR YOU -->
+    <section class="mt-20">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+            <h2 class="text-[20px] font-bold text-secondary">Just For You</h2>
+            <a href="#" class="text-primary font-bold text-[13px] uppercase tracking-wider flex items-center gap-2 hover:translate-x-1 transition-transform group">
+                VIEW ALL PRODUCTS
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+            <div *ngFor="let prod of justForYouProducts" class="bg-white rounded border border-gray-200 p-4 hover:shadow-lg transition-all duration-300 group relative flex flex-col h-full bg-cover">
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 right-4 flex justify-between z-10 pointer-events-none">
+                     <span *ngIf="prod.badge && prod.badge !== ''" class="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded leading-none">{{prod.badge}}</span>
+                     <span *ngIf="!prod.badge || prod.badge === ''"></span>
+                     <span *ngIf="prod.discount && prod.discount !== '0%'" class="bg-[#10b981] text-white text-[10px] font-bold px-2 py-1 rounded leading-none">Save {{prod.discount}}</span>
+                </div>
+                
+                <!-- Image -->
+                <div class="w-full h-48 mb-4 relative flex items-center justify-center p-2">
+                     <img [src]="prod.image" [alt]="prod.name" onerror="this.src='https://placehold.co/300x400/fff/f37021?text=Product'" class="max-h-full object-contain mix-blend-multiply group-hover:scale-105 group-hover:rotate-1 transition-transform duration-500">
+                </div>
+                
+                <!-- Info -->
+                <div class="mt-auto flex flex-col justify-end">
+                    <h3 class="text-[13px] font-medium text-secondary mb-1 leading-tight min-h-[40px]">{{prod.name}}</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-[15px] font-bold text-primary">৳{{prod.price}}</span>
+                        <span *ngIf="prod.oldPrice" class="text-[12px] text-gray-400 line-through">৳{{prod.oldPrice}}</span>
+                    </div>
+                    
+                    <button class="w-full border border-primary/40 text-primary text-[13px] font-semibold py-2.5 rounded flex items-center justify-center gap-2 hover:bg-primary hover:text-white hover:border-primary transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Add To Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center items-center gap-1.5 mt-8">
+             <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
+             <div class="w-1.5 h-1.5 rounded-full border border-primary bg-transparent"></div>
         </div>
     </section>
 
@@ -241,12 +503,12 @@
                         </svg>
                     </div>
                     <div>
-                        <span class="text-lg font-black text-secondary uppercase">Ghorer</span>
-                        <span class="text-lg font-bold text-primary uppercase">Bazar</span>
+                        <span class="text-lg font-black text-secondary uppercase">Aurora</span>
+                        <span class="text-lg font-bold text-primary uppercase">Swadesh AF</span>
                     </div>
                 </div>
                 <p class="text-gray-400 text-sm leading-relaxed mb-8">
-                    Ghorer Bazar is an e-commerce platform dedicated to providing safe and reliable food to every home.
+                    Aurora Swadesh AF is an e-commerce platform dedicated to providing safe and reliable food to every home.
                 </p>
                 <div class="space-y-4 text-sm text-gray-500">
                     <div class="flex items-start gap-4">
@@ -259,7 +521,7 @@
                     </div>
                     <div class="flex items-start gap-4">
                         <svg class="w-5 h-5 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        <span class="hover:text-primary transition-colors cursor-pointer">contact@ghorerbazar.com</span>
+                        <span class="hover:text-primary transition-colors cursor-pointer">contact@aurora.com</span>
                     </div>
                 </div>
             </div>
@@ -271,7 +533,7 @@
                     <li class="hover:text-primary transition-colors cursor-pointer">About us</li>
                     <li class="hover:text-primary transition-colors cursor-pointer">Contact us</li>
                     <li class="hover:text-primary transition-colors cursor-pointer">Company Information</li>
-                    <li class="hover:text-primary transition-colors cursor-pointer">Ghorer Bazar Stories</li>
+                    <li class="hover:text-primary transition-colors cursor-pointer">Aurora Swadesh AF Stories</li>
                     <li class="hover:text-primary transition-colors cursor-pointer">Terms & Conditions</li>
                     <li class="hover:text-primary transition-colors cursor-pointer">Privacy Policy</li>
                 </ul>
@@ -332,7 +594,7 @@
         </div>
 
         <div class="mt-20 text-center text-gray-400 text-xs font-medium">
-            Copyright © 2026 GhorerBazar
+            Copyright © 2026 Aurora Swadesh AF
         </div>
     </div>
   </footer>
