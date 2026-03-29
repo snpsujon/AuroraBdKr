@@ -16,8 +16,11 @@ gsap.registerPlugin(ScrollTrigger);
         <!-- 3D Hero Background -->
         <div #canvasContainer class="fixed inset-0 pointer-events-none z-0 bg-white"></div>
 
+        <!-- Combined First Screen -->
+        <div class="relative w-full min-h-screen flex flex-col z-10">
+        
         <!-- Hero Section -->
-        <section class="hero-section relative min-h-screen flex items-center justify-center text-center px-6 overflow-hidden z-10 pt-36 md:pt-48 bg-transparent">
+        <section class="hero-section relative flex-1 flex items-center justify-center text-center px-6 overflow-hidden pt-36 md:pt-40 bg-transparent">
             <!-- Premium Ultra-Thin Blurry Overlay -->
             <div class="absolute inset-0 bg-white/[0.03] backdrop-blur-[2px] pointer-events-none z-0"></div>
             
@@ -29,11 +32,11 @@ gsap.registerPlugin(ScrollTrigger);
                     <span class="hero-tag inline-block text-accent uppercase tracking-[0.6em] text-[10px] font-bold font-sans translate-y-full">Global Connectivity Excellence</span>
                 </div>
                 
-                <h1 class="hero-title text-6xl md:text-9xl text-primary font-bold font-serif leading-[1.1] mb-8 tracking-tighter italic">
+                <h1 class="hero-title text-6xl md:text-7xl text-primary font-bold font-serif leading-[1.0] mb-4 tracking-tighter italic">
                     Aurora <br class="md:hidden"> Hanguk <br> <span class="text-accent not-italic">Global</span>
                 </h1>
                 
-                <p class="hero-subtitle text-lg md:text-2xl text-primary/80 max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                <p class="hero-subtitle text-base md:text-lg text-primary/80 max-w-2xl mx-auto mb-6 font-light leading-relaxed">
                     Connecting <span class="text-primary font-medium italic underline decoration-accent/30 underline-offset-8">lifestyle</span>, business and global opportunities through elite Korean innovation.
                 </p>
                 
@@ -50,12 +53,25 @@ gsap.registerPlugin(ScrollTrigger);
                 </div>
             </div>
 
+        </section>
+
+        <!-- Gateway Section (Sector Cards) - Moved Up -->
+        <section class="gateway-section relative pb-16 pt-0 z-30 bg-transparent flex items-center justify-center">
+            <div class="max-w-[1920px] mx-auto w-full px-6 md:px-12 xl:px-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-center justify-center px-4 overflow-visible">
+                     <ng-container *ngFor="let sector of sectorData; let i = index">
+                        <app-sector-card [index]="i" [title]="sector.title" [description]="sector.description" [link]="sector.link" class="sector-card-item block"></app-sector-card>
+                     </ng-container>
+                </div>
+            </div>
+            
             <!-- Floating Scroll Indicator -->
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 scroll-indicator">
-                <div class="w-[1px] h-20 bg-gradient-to-b from-accent to-transparent"></div>
-                <span class="text-[10px] text-accent uppercase tracking-[0.5em] font-bold rotate-90 translate-y-10">Scroll</span>
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator">
+                <div class="w-[1px] h-8 bg-gradient-to-b from-accent to-transparent"></div>
+                <span class="text-[8px] text-accent uppercase tracking-[0.5em] font-bold rotate-90 translate-y-4">Scroll</span>
             </div>
         </section>
+        </div>
 
         <!-- Global Influence Statistics Section -->
         <section class="stats-section py-20 bg-white relative z-20">
@@ -76,24 +92,6 @@ gsap.registerPlugin(ScrollTrigger);
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Gateway Section -->
-        <section class="gateway-section relative py-60 z-30 bg-white flex items-center justify-center">
-            <div class="max-w-[1920px] mx-auto w-full px-6 md:px-12 xl:px-20">
-                <div class="text-center mb-40 section-header">
-                    <span class="text-accent uppercase tracking-[1em] text-[10px] font-bold block mb-8">Business Sectors</span>
-                    <h2 class="text-5xl md:text-8xl text-primary font-bold font-serif leading-[0.95] tracking-tighter italic">
-                        The Global <span class="italic text-accent underline decoration-accent/20 underline-offset-[20px]">Gateway</span>
-                    </h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-center justify-center px-4 overflow-visible">
-                     <ng-container *ngFor="let sector of sectorData; let i = index">
-                        <app-sector-card [index]="i" [title]="sector.title" [description]="sector.description" [link]="sector.link" class="sector-card-item block"></app-sector-card>
-                     </ng-container>
                 </div>
             </div>
         </section>

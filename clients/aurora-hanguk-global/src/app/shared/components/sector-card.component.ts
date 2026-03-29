@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
   template: `
     <div 
-      class="group relative h-[450px] w-full rounded-[2rem] overflow-hidden transition-all duration-700 cursor-pointer perspective-1000"
+      class="group relative h-[380px] w-full rounded-[2rem] overflow-hidden transition-all duration-700 cursor-pointer perspective-1000"
       [routerLink]="link"
       (mousemove)="onMouseMove($event)"
       (mouseleave)="onMouseLeave()"
@@ -24,18 +24,18 @@ import { RouterLink } from '@angular/router';
       ></div>
 
       <!-- Icon/Index -->
-      <div class="absolute top-10 left-10 text-primary/5 text-9xl font-serif italic group-hover:text-white/10 transition-colors duration-700 select-none leading-none">
+      <div class="absolute top-6 left-6 text-primary/5 text-7xl font-serif italic group-hover:text-white/10 transition-colors duration-700 select-none leading-none">
         0{{index + 1}}
       </div>
 
       <!-- Content -->
-      <div class="relative z-10 h-full p-10 flex flex-col justify-end">
-        <div class="mb-6 transform transition-all duration-700 group-hover:-translate-y-2">
+      <div class="relative z-10 h-full p-8 flex flex-col justify-end">
+        <div class="mb-4 transform transition-all duration-700 group-hover:-translate-y-2">
             <h3 class="text-2xl font-serif font-bold text-primary group-hover:text-white transition-colors duration-500 italic mb-3">{{title}}</h3>
             <div class="w-12 h-[2px] bg-accent transition-all duration-700 group-hover:w-full"></div>
         </div>
 
-        <p class="text-primary/70 text-sm font-light leading-relaxed mb-8 transition-all duration-700 group-hover:text-white/80">
+        <p class="text-primary/70 text-xs font-light leading-relaxed mb-6 transition-all duration-700 group-hover:text-white/80">
             {{description}}
         </p>
 
