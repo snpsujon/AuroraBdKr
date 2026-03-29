@@ -23,6 +23,8 @@ out/
 # PHP / Laravel / Composer ignores (for Nulled CMS)
 vendor/
 .env
+# Track skincare env so git deploy matches dev (use a private repo; never commit real secrets to a public repo).
+!clients/aurora-skincare/.env
 storage/framework/views/
 storage/logs/
 

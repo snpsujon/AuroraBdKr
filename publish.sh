@@ -15,6 +15,12 @@ require_cmd() {
   fi
 }
 
+# Set PUBLISH_NONINTERACTIVE=1 to keep port/domain/dev port from docker/projects.state.json and skip Certbot prompt.
+# Use after copying state from dev: ./scripts/sync-dev-to-server.sh ...
+publish_noninteractive() {
+  [[ "${PUBLISH_NONINTERACTIVE:-}" == "1" || "${PUBLISH_NONINTERACTIVE:-}" == "yes" ]]
+}
+
 ensure_json_files() {
   if [[ ! -f "${CONFIG_FILE}" ]]; then
     echo "Missing config file: ${CONFIG_FILE}"
@@ -297,6 +303,11 @@ configure_project_port() {
   current_port="$(get_project_port "${project_id}")"
   echo "Current proxy/app port for ${name}: ${current_port}"
 
+  if publish_noninteractive; then
+    echo "Non-interactive: keeping port ${current_port}."
+    return 0
+  fi
+
   read -rp "Keep this port? (y/n): " keep_port
   if [[ "${keep_port}" =~ ^[Yy]$ ]]; then
     return 0
@@ -332,6 +343,11 @@ configure_project_dev_port() {
     echo "Current dev port for ${name} (${dev_port_env}): ${current_dev_port}"
   fi
 
+  if publish_noninteractive; then
+    echo "Non-interactive: keeping dev port as configured."
+    return 0
+  fi
+
   read -rp "Keep this dev port? (y/n): " keep_dev_port
   if [[ "${keep_dev_port}" =~ ^[Yy]$ ]]; then
     return 0
@@ -348,9 +364,37 @@ configure_project_dev_port() {
   done
 }
 
+project_publish_no_build() {
+  local project_id="$1"
+  local flag
+  flag="$(project_field "${project_id}" "publish_no_build")"
+  [[ "${flag}" == "true" ]]
+}
+
+compose_up_project() {
+  local project_id="$1"
+  if project_publish_no_build "${project_id}"; then
+    run_compose "${project_id}" up -d
+  else
+    run_compose "${project_id}" up -d --build
+  fi
+}
+
 deploy_compose_project() {
   local project_id="$1"
-  run_compose "${project_id}" up -d --build
+  local env_file
+
+  if [[ "${project_id}" == "aurora-skincare" ]]; then
+    env_file="${SCRIPT_DIR}/clients/aurora-skincare/.env"
+    if [[ ! -f "${env_file}" ]]; then
+      echo "Missing ${env_file}"
+      echo "Git does not track .env. Copy it from your dev machine, for example:"
+      echo "  ./scripts/sync-dev-to-server.sh user@server:/path/to/$(basename "${SCRIPT_DIR}")"
+      return 1
+    fi
+  fi
+
+  compose_up_project "${project_id}"
 }
 
 configure_project_domain() {
@@ -362,6 +406,11 @@ configure_project_domain() {
   domain="$(get_project_domain "${project_id}")"
 
   if [[ -z "${domain}" ]]; then
+    if publish_noninteractive; then
+      echo "Non-interactive: no domain in ${STATE_FILE}."
+      echo "Copy docker/projects.state.json from dev (./scripts/sync-dev-to-server.sh) or run publish interactively once."
+      return 1
+    fi
     echo "First-time init for ${name}."
     read -rp "Enter domain for ${name} (example: app.example.com): " domain
     if [[ -z "${domain}" ]]; then
@@ -369,6 +418,11 @@ configure_project_domain() {
       return 1
     fi
     set_project_domain "${project_id}" "${domain}"
+    return 0
+  fi
+
+  if publish_noninteractive; then
+    echo "Non-interactive: keeping domain ${domain}."
     return 0
   fi
 
@@ -801,7 +855,7 @@ edit_project_config() {
   echo "Project config updated: ${project_id}"
   read -rp "Bring project UP now? (y/n): " bring_up
   if [[ "${bring_up}" =~ ^[Yy]$ ]]; then
-    run_compose "${project_id}" up -d --build
+    compose_up_project "${project_id}"
     echo "Project is up."
   fi
 }
@@ -825,9 +879,13 @@ publish_project() {
   setup_nginx_proxy "${project_id}" "${domain}"
   echo "Nginx reverse proxy configured for ${domain} -> 127.0.0.1:${port}"
 
-  read -rp "Do SSL setup now using Certbot? (y/n): " ssl_choice
-  if [[ "${ssl_choice}" =~ ^[Yy]$ ]]; then
-    setup_ssl_for_project "${project_id}"
+  if publish_noninteractive; then
+    echo "Non-interactive: skipping Certbot prompt (use SSL menu later if needed)."
+  else
+    read -rp "Do SSL setup now using Certbot? (y/n): " ssl_choice
+    if [[ "${ssl_choice}" =~ ^[Yy]$ ]]; then
+      setup_ssl_for_project "${project_id}"
+    fi
   fi
 }
 

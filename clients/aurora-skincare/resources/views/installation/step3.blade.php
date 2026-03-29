@@ -48,27 +48,27 @@
                         @csrf
                         <div class="form-group">
                             <label for="db_host" class="fs-12 fw-500" style="color: #666;">Database Host</label>
-                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_host" name = "DB_HOST" required autocomplete="off">
+                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_host" name = "DB_HOST" value="{{ old('DB_HOST', $dbDefaults['DB_HOST'] ?? '') }}" required autocomplete="off">
                             <input type="hidden" name = "types[]" value="DB_HOST">
                         </div>
                         <div class="form-group">
                             <label for="db_name" class="fs-12 fw-500" style="color: #666;">Database Name</label>
-                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_name" name = "DB_DATABASE" required autocomplete="off">
+                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_name" name = "DB_DATABASE" value="{{ old('DB_DATABASE', $dbDefaults['DB_DATABASE'] ?? '') }}" required autocomplete="off">
                             <input type="hidden" name = "types[]" value="DB_DATABASE">
                         </div>
                         <div class="form-group">
                             <label for="db_user" class="fs-12 fw-500" style="color: #666;">Database Username</label>
-                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_user" name = "DB_USERNAME" required autocomplete="off">
+                            <input type="text" class="form-control rounded-2 border" style="height: 36px !important;" id="db_user" name = "DB_USERNAME" value="{{ old('DB_USERNAME', $dbDefaults['DB_USERNAME'] ?? '') }}" required autocomplete="off">
                             <input type="hidden" name = "types[]" value="DB_USERNAME">
                         </div>
                         <div class="form-group">
                             <label for="db_pass" class="fs-12 fw-500" style="color: #666;">Database Password</label>
-                            <input type="password" class="form-control rounded-2 border" style="height: 36px !important;" id="db_pass" name = "DB_PASSWORD" autocomplete="off">
+                            <input type="password" class="form-control rounded-2 border" style="height: 36px !important;" id="db_pass" name = "DB_PASSWORD" value="{{ old('DB_PASSWORD', $dbDefaults['DB_PASSWORD'] ?? '') }}" autocomplete="off">
                             <input type="hidden" name = "types[]" value="DB_PASSWORD">
                         </div>
                         <div class="mb-4 pb-4 absolute-bottom-left right-0 d-flex justify-content-center">
                             @php
-                                $route = ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '127.0.0.1') ? route('step1') :  route('step2') 
+                                $route = \App\Http\Controllers\InstallController::shouldSkipPurchaseCodeStep() ? route('step1') : route('step2');
                             @endphp
                             <a href="{{ $route }}" class="back-btn-svg mr-3" title="Go Back" style="box-shadow: 0px 8px 16px rgb(255 88 0 / 16%); border-radius: 50%;">
                               <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">

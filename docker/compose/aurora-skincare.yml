@@ -6,17 +6,15 @@ services:
     container_name: active-ecommerce-laravel
     ports:
       - "${APP_PORT:-8080}:80"
+    volumes:
+      # Host .env is source of truth (DB, keys) — same as local; publish does not bake secrets into the image.
+      - ./clients/aurora-skincare/.env:/var/www/html/.env
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
       APP_URL: ${APP_URL:-http://localhost:${APP_PORT:-8080}}
       ASSET_URL: ${ASSET_URL:-http://localhost:${APP_PORT:-8080}}
       FORCE_HTTPS: ${FORCE_HTTPS:-Off}
-      DB_CONNECTION: mysql
-      DB_HOST: ${DB_HOST:-host.docker.internal}
-      DB_PORT: ${DB_PORT:-3306}
-      DB_DATABASE: ${DB_DATABASE:-aurora_skin}
-      DB_USERNAME: ${DB_USERNAME:-root}
-      DB_PASSWORD: ${DB_PASSWORD:-}
+      # All DB_* must come from .env — any compose DB_* overrides .env and breaks remote/local DB.
     extra_hosts:
       - "host.docker.internal:host-gateway"

@@ -18,7 +18,8 @@
       "default_service": "laravel",
       "nginx_site": "aurora-skincare",
       "port_env": "APP_PORT",
-      "default_port": 8080
+      "default_port": 8080,
+      "publish_no_build": true
     },
     {
       "id": "backend-server",

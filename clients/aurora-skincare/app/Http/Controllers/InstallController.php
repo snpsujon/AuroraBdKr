@@ -15,6 +15,31 @@ use ZipArchive;
 
 class InstallController extends Controller
 {
+    /**
+     * Short install path (skip purchase code) — same behavior as when developing on localhost.
+     * Uses the browser/host from the request (not Apache's ServerName, which is often "localhost" in Docker).
+     */
+    public static function shouldSkipPurchaseCodeStep(): bool
+    {
+        if (config('install.skip_purchase')) {
+            return true;
+        }
+
+        if (! app()->runningInConsole() && request()) {
+            try {
+                $host = strtolower(request()->getHost());
+
+                return in_array($host, ['localhost', '127.0.0.1', '::1', '[::1]'], true);
+            } catch (\Throwable $e) {
+                // fall through
+            }
+        }
+
+        $server = strtolower($_SERVER['SERVER_NAME'] ?? '');
+
+        return in_array($server, ['localhost', '127.0.0.1'], true);
+    }
+
     public function step0() {
         $this->writeEnvironmentFile('APP_URL', URL::to('/'));
         return view('installation.step0');
@@ -33,11 +58,17 @@ class InstallController extends Controller
 
     public function step3($error = "") {
         CoreComponentRepository::instantiateShopRepository();
-        if($error == ""){
-            return view('installation.step3');
-        }else {
-            return view('installation.step3', compact('error'));
+        $dbDefaults = [
+            'DB_HOST'     => env('DB_HOST'),
+            'DB_DATABASE' => env('DB_DATABASE'),
+            'DB_USERNAME' => env('DB_USERNAME'),
+            'DB_PASSWORD' => env('DB_PASSWORD'),
+        ];
+        if ($error == '') {
+            return view('installation.step3', compact('dbDefaults'));
         }
+
+        return view('installation.step3', compact('error', 'dbDefaults'));
     }
 
     public function step4() {
